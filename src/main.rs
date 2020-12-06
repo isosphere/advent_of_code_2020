@@ -109,6 +109,20 @@ fn test_day_two_part_one_password_verify() {
     assert!(day_two_part_one_password_verify(2, 9, "c", "ccccccccc"));
 }
 
+fn day_two_part_two_password_verify(index_a: usize, index_b: usize, character: &str, password: &str) -> bool {
+    let char_array: Vec<(usize, char)> = password.char_indices().collect();
+    assert!(index_a > 0 && index_a <= password.len(), "index_a out of bounds");
+    assert!(index_b > 0 && index_b <= password.len(), "index_b out of bounds");
+    character.starts_with(char_array[index_a - 1].1) ^ character.starts_with(char_array[index_b - 1].1)
+}
+
+#[test]
+fn test_day_two_part_two_password_verify() {
+    assert!(day_two_part_two_password_verify(1, 3, "a", "abcde"));
+    assert!(!day_two_part_two_password_verify(1, 3, "b", "cdefg"));
+    assert!(!day_two_part_two_password_verify(2, 9, "c", "ccccccccc"));
+}
+
 
 fn main() {
     let day_one_input = read_file_to_usize_vec("input/day_1_input").unwrap();
@@ -123,4 +137,11 @@ fn main() {
         }
     );
     println!("Day two part one answer: {}", day_two_part_one);
+    let day_two_part_two = day_two_input.iter().fold(
+        0, |acc, (index_a, index_b, character, password)| match day_two_part_two_password_verify(*index_a, *index_b, character, password) {
+            true => acc + 1,
+            false => acc
+        }
+    );
+    println!("Day two part two answer: {}", day_two_part_two);
 }
