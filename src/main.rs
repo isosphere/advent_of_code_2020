@@ -96,7 +96,18 @@ fn day_two_file_reader(file: &str) -> Result<Vec<(usize, usize, String, String)>
     Ok(output)
 }
 
+fn day_two_password_verify(minimum: usize, maximum: usize, character: &str, password: &str) -> bool {
+    let counter = password.chars().fold(0, |acc, c| match character.starts_with(c) {true => acc + 1, false => acc} );
 
+    counter <= maximum && counter >= minimum
+}
+
+#[test]
+fn test_day_two_password_verify() {
+    assert!(day_two_password_verify(1, 3, "a", "abcde"));
+    assert!(!day_two_password_verify(1, 3, "b", "cdefg"));
+    assert!(day_two_password_verify(2, 9, "c", "ccccccccc"));
+}
 
 fn main() {
     let day_one_input = read_file_to_usize_vec("input/day_1_input").unwrap();
